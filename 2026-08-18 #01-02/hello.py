@@ -10,6 +10,8 @@ from fastapi import FastAPI
 # pip install fastapi uvicorn
 # uvicorn main:app --reload 
 
+#https://github.com/dkosterin/FastapiDockerCourse
+
 app = FastAPI()
 
 #QUERY-параметры http://localhost:8000/hello?name=Alexey
@@ -23,3 +25,7 @@ def hello(name: str=""):
 @app.get("/hello/{name}")
 def hello_name(name: str):
     return {"message": f"Hello, {name}!"}
+
+@app.post("/number")
+def func(number: int):
+    return {"Your number": number}
