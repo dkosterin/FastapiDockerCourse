@@ -59,8 +59,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# StaticFiles - статические файлы (CSS, изображения и прочее)
-
 students = []
 
 @app.get("/students/list", response_class=HTMLResponse)
@@ -69,20 +67,7 @@ def get_students_page(request: Request):
                                       name="create-student.html",
                                       context={"students": students})
 
-# @app.post("/students/list", response_class=HTMLResponse)
-# def create_student_from_form(request: Request,
-#                              name: str = Form(...), # ellipsis
-#                              age: int = Form(...), 
-#                              course: int = Form(...)):
-#     id = max(s.id for s in students) + 1 if len(students) > 0 else 1
-#     s = Student(id=id, name=name, age=age, course=course)
-#     students.append(s)
-#     return templates.TemplateResponse(request=request,
-#                                       name="create-student.html",
-#                                       context={"students": students}
-#                                       )
-
-@app.post("/students/create-student")
+@app.post("/students/list", response_class=HTMLResponse)
 def create_student_from_form(request: Request,
                              name: str = Form(...), # ellipsis
                              age: int = Form(...), 
@@ -90,7 +75,20 @@ def create_student_from_form(request: Request,
     id = max(s.id for s in students) + 1 if len(students) > 0 else 1
     s = Student(id=id, name=name, age=age, course=course)
     students.append(s)
-    return RedirectResponse(request.url_for("get_students_page"), status_code=303)
+    return templates.TemplateResponse(request=request,
+                                      name="create-student.html",
+                                      context={"students": students}
+                                      )
+
+# @app.post("/students/create-student")
+# def create_student_from_form(request: Request,
+#                              name: str = Form(...), # ellipsis
+#                              age: int = Form(...), 
+#                              course: int = Form(...)):
+#     id = max(s.id for s in students) + 1 if len(students) > 0 else 1
+#     s = Student(id=id, name=name, age=age, course=course)
+#     students.append(s)
+#     return RedirectResponse(request.url_for("get_students_page"), status_code=303)
 
 @app.get("/students")
 def get_students(course: int | None=None) -> list[Student]:
