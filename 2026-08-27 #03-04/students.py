@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 # pip install Jinja2 (для шаблонов)
@@ -47,6 +48,7 @@ class StudentCreate(BaseModel):
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+app.mount('/static', StaticFiles(directory='static'), name='static')
 
 app.add_middleware(
     CORSMiddleware,
@@ -57,6 +59,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# StaticFiles - статические файлы (CSS, изображения и прочее)
+
 students = []
 
 @app.get("/students/list", response_class=HTMLResponse)
@@ -65,20 +69,7 @@ def get_students_page(request: Request):
                                       name="create-student.html",
                                       context={"students": students})
 
-@app.post("/students/list", response_class=HTMLResponse)
-def create_student_from_form(request: Request,
-                             name: str = Form(...), # ellipsis
-                             age: int = Form(...), 
-                             course: int = Form(...)):
-    id = max(s.id for s in students) + 1 if len(students) > 0 else 1
-    s = Student(id=id, name=name, age=age, course=course)
-    students.append(s)
-    return templates.TemplateResponse(request=request,
-                                      name="create-student.html",
-                                      context={"students": students}
-                                      )
-
-# @app.post("/students/create-student")
+# @app.post("/students/list", response_class=HTMLResponse)
 # def create_student_from_form(request: Request,
 #                              name: str = Form(...), # ellipsis
 #                              age: int = Form(...), 
@@ -86,7 +77,20 @@ def create_student_from_form(request: Request,
 #     id = max(s.id for s in students) + 1 if len(students) > 0 else 1
 #     s = Student(id=id, name=name, age=age, course=course)
 #     students.append(s)
-#     return RedirectResponse(request.url_for("get_students_page"), status_code=303)
+#     return templates.TemplateResponse(request=request,
+#                                       name="create-student.html",
+#                                       context={"students": students}
+#                                       )
+
+@app.post("/students/create-student")
+def create_student_from_form(request: Request,
+                             name: str = Form(...), # ellipsis
+                             age: int = Form(...), 
+                             course: int = Form(...)):
+    id = max(s.id for s in students) + 1 if len(students) > 0 else 1
+    s = Student(id=id, name=name, age=age, course=course)
+    students.append(s)
+    return RedirectResponse(request.url_for("get_students_page"), status_code=303)
 
 @app.get("/students")
 def get_students(course: int | None=None) -> list[Student]:
