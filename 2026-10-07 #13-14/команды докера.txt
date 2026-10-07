@@ -1,0 +1,13 @@
+docker run - создание и запуск контейнера по имеющемуся образу
+Пример: docker run -d -p 8080:80 --name MyContainer MyImage
+-d для запуска в фоновом режиме, -p для порта
+docker start - запуск существующего контейнера
+Пример: docker start MyContainer
+docker stop - остановка запущенного контейнера
+Пример: docker stop MyContainer
+docker ps - список существующих контейнеров
+Пример: docker ps (только запущенный), docker ps -a (все контейнеры)
+docker images - список существующих образов
+docker build - создание образа по Dockerfile
+Пример: docker build -t welcome-to-docker .
+-t нужно для того, чтобы указать имя образу
