@@ -1,0 +1,22 @@
+{% extends "students.html" %} 
+
+{% block create %} 
+<div>
+    <h2>Добавить студента</h2>
+    <form method="post" action="{{ url_for('create_student_from_form') }}">
+    <label>
+      Имя
+      <input type="text" name="name" required />
+    </label>
+    <label>
+      Возраст
+      <input type="number" name="age" required />
+    </label>
+    <label>
+      Курс
+      <input type="number" name="course" required />
+    </label>
+    <button type="submit">Добавить</button>
+  </form>
+</div>
+{% endblock %}
