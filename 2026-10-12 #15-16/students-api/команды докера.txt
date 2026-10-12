@@ -16,6 +16,13 @@ docker compose это инструмент, который позволяет о
 несколько контейнеров и работать с ними как с одним единым
 приложением
 docker compose up --build -d
-
 docker compose down 
 docker compose down -v
+
+docker compose exec -it db psql -U user -d students_db 
+\dt -- список таблиц
+SELECT * FROM table;
+
+SELECT *
+FROM table
+WHERE id = 1;
