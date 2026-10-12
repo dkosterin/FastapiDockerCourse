@@ -15,9 +15,9 @@ docker build - создание образа по Dockerfile
 docker compose это инструмент, который позволяет объединить
 несколько контейнеров и работать с ними как с одним единым
 приложением
-docker compose up --build -d
-docker compose down 
-docker compose down -v
+docker compose up --build -d для запуска контейнеров
+docker compose down для остановки контейнеров
+docker compose down -v для остановки контейнеров с удалением тома
 
 docker compose exec -it db psql -U user -d students_db 
 \dt -- список таблиц
